@@ -118,9 +118,9 @@ def torquestar(torque,angularve,gears):
     angularvet=angularve*gears
     return torquet,angularvet
 
-def traction(v,radius,angularvet):
+def traction(v,radius,angularVT):
     angularvew=v*radius
-    finaldriveratio=angularvet/angularvew
+    finaldriveratio=angularVT/angularvew
     finaldrivE=fdrive/100
 
 
