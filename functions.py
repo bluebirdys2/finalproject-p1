@@ -2,6 +2,8 @@
 #contains input, calculation, and output functions
 import numpy as np
 import openpyxl as pyxl
+import matplotlib.pyplot as plt
+from numpy.polynomial import Polynomial as poly
 
 workbook= pyxl.load_workbook("data.xlsx")
 sheetmain = workbook["Problem Variables"]
