@@ -111,5 +111,8 @@ def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
+    return roadLoad
+
+
 
 
