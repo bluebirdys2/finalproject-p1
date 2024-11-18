@@ -30,23 +30,28 @@ def carChoice(sheet):
             case 1:
                 dragC=sheet["C26"].value
                 area=sheet["D26"].value
+                name=sheet["B26"].value
             case 2:
                 dragC=sheet["C27"].value
                 area=sheet["D27"].value
+                name=sheet["B27"].value
             case 3:
                 dragC=sheet["C28"].value
                 area=sheet["D28"].value
+                name=sheet["B28"].value
             case 4:
                 dragC=sheet["C29"].value
                 area=sheet["D29"].value
+                name=sheet["B29"].value
             case 5:
                 dragC=sheet["C30"].value
                 area=sheet["D30"].value
+                name=sheet["B30"].value
             
             case _: 
             #HR Friendly error message
                 print("ERROR! Selection is invalid\n")
-    return dragC,area
+    return dragC,area,name
 def getGears(sheet):
     """
     This function takes in the spreadsheet and then uses the sheet to 
@@ -108,7 +113,7 @@ def traction(v,radius,dratio,teff,angularve,torque,fdrive):
     traction=torqued/radius
     return traction,torqued
     
-def graphs(angularve, torque):
+def graphs(angularve, torque,name):
     fx=poly.fit(angularve,torque,2)
     x=np.linspace(min(angularve),max(angularve),6000)
     fy=fx(x)
@@ -117,3 +122,5 @@ def graphs(angularve, torque):
     plt.plot(x,fy,"r-")
     plt.title("Experimental dyno data and fit")
     plt.ylabel("engine torque(n m)")
+    plt.xlabel("angular velocity(rpm)")
+    plt.legend([name])
