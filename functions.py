@@ -2,22 +2,17 @@
 #contains input, calculation, and output functions
 import numpy as np
 import openpyxl as pyxl
-
+import matplotlib.pyplot as plt
+from numpy.polynomial import Polynomial as poly
 workbook= pyxl.load_workbook("data.xlsx")
 sheetmain = workbook["Problem Variables"]
-
-
-
 
 def carChoice(sheet):
     """
     This function gives the user an option for which car they want
     and then returns the drag coefficient and area of front bumbper
-
-
     Args:
     sheet= needs a sheet to get all value
-
     Returns:
     dragC= Drag coefficient
     area= area of front hood
@@ -29,7 +24,6 @@ def carChoice(sheet):
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
     print("**********************************************")
     while(option!=5):
-
         option=int(input("Select the car choice options (1-5) "))
         match option:
             case 1:
@@ -52,7 +46,6 @@ def carChoice(sheet):
             #HR Friendly error message
                 print("ERROR! Selection is invalid\n")
     return dragC,area
-
 def getGears(sheet):
     """
     This function takes in the spreadsheet and then uses the sheet to 
@@ -74,10 +67,7 @@ def getGears(sheet):
         while(sheet["B{}".format(i)].value<0):
             sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
         gears.append(sheet["B{}".format(i)])
-
     return gears
-
-
 def getothers(sheet):
     
     val=[]
@@ -97,19 +87,23 @@ def getothers(sheet):
     airden=sheet["C21"].value
     dratio=sheet["C22"].value
     centerg=sheet["C23"].value
-
     return speed,tslope,wbase,radius,rollre,hA,fdrive,teff,weight,airden,dratio,centerg
-
-
 def getdyno(sheet):
     angularve=sheet["A4":"A15"].value
     torque=sheet["B4":"B15"].value
     return angularve,torque
-
-
 def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
+    return roadLoad
 
-
+def graphs(angularve, torque):
+    fx=poly.fit(angularve,torque,2)
+    x=np.linspace(min(angularve),max(angularve),6000)
+    fy=fx(x)
+    plt.subplot(2,2,1)
+    plt.plot(angularve,torque,"ro")
+    plt.plot(x,fy,"r-")
+    plt.title("Experimental dyno data and fit")
+    plt.ylabel("engine torque(n m)")
