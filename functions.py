@@ -99,16 +99,12 @@ def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
 
-def torquestar(torque,angularve,gears):
-    torquet=torque*gears
-    angularvet=angularve*gears
-    return torquet,angularvet
-
-def traction(v,radius,angularvet,fdrive,teff,angularve,torque):
-    angularvew=v*radius
-    finaldriveratio=angularvet/angularvew
+def traction(v,radius,dratio,teff,angularve,torque,fdrive):
+    
+    angularvew=v/radius
+    angularvet=dratio*angularvew
     finaldrivE=fdrive/100
-    torqued=finaldrivE*finaldriveratio*((teff/100)*(angularve/angularvet)*torque)
+    torqued=finaldrivE*dratio*((teff/100)*(angularve/angularvet)*torque)
     traction=torqued/radius
     return traction,torqued
     
