@@ -4,22 +4,15 @@ import numpy as np
 import openpyxl as pyxl
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial as poly
-
 workbook= pyxl.load_workbook("data.xlsx")
 sheetmain = workbook["Problem Variables"]
-
-
-
 
 def carChoice(sheet):
     """
     This function gives the user an option for which car they want
     and then returns the drag coefficient and area of front bumbper
-
-
     Args:
     sheet= needs a sheet to get all value
-
     Returns:
     dragC= Drag coefficient
     area= area of front hood
@@ -54,7 +47,6 @@ def carChoice(sheet):
             #HR Friendly error message
                 print("ERROR! Selection is invalid\n")
     return dragC,area
-
 def getGears(sheet):
     """
     This function takes in the spreadsheet and then uses the sheet to 
@@ -76,10 +68,7 @@ def getGears(sheet):
         while(sheet["B{}".format(i)].value<0):
             sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
         gears.append(sheet["B{}".format(i)])
-
     return gears
-
-
 def getothers(sheet):
     
     val=[]
@@ -99,16 +88,11 @@ def getothers(sheet):
     airden=sheet["C21"].value
     dratio=sheet["C22"].value
     centerg=sheet["C23"].value
-
     return speed,tslope,wbase,radius,rollre,hA,fdrive,teff,weight,airden,dratio,centerg
-
-
 def getdyno(sheet):
     angularve=sheet["A4":"A15"].value
     torque=sheet["B4":"B15"].value
     return angularve,torque
-
-
 def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
