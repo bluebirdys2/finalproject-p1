@@ -30,7 +30,7 @@ def carChoice(sheet):
     print("**********************************************")
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
     print("**********************************************")
-    while(option!=5):
+    while(option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
 
         option=int(input("Select the car choice options (1-5) "))
         match option:
