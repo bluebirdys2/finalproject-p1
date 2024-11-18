@@ -111,4 +111,13 @@ def traction(v,radius,angularvet,fdrive,teff,angularve,torque):
     torqued=finaldrivE*finaldriveratio*((teff/100)*(angularve/angularvet)*torque)
     traction=torqued/radius
     return traction,torqued
-
+    
+def graphs(angularve, torque):
+    fx=poly.fit(angularve,torque,2)
+    x=np.linspace(min(angularve),max(angularve),6000)
+    fy=fx(x)
+    plt.subplot(2,2,1)
+    plt.plot(angularve,torque,"ro")
+    plt.plot(x,fy,"r-")
+    plt.title("Experimental dyno data and fit")
+    plt.ylabel("engine torque(n m)")
