@@ -113,10 +113,13 @@ def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weigh
     te=fx(angularve)
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
-
     acceleration=(((-1*(traction-roadLoad))*9.81)/weight)
-
     return traction,torqued,acceleration
+
+def loads(weight,tslope,wbase,centerg):
+    frontload=(weight*np.cos(tslope)*centerg)/wbase
+    rearload=(weight*np.cos(tslope))-frontload
+    return rearload,frontload
     
 def graphs(angularve, torque,name):
     fx=poly.fit(angularve,torque,2)
