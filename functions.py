@@ -19,6 +19,7 @@ def carChoice(sheet):
     
     
     """
+    count=0
     option=0
     print("**********************************************")
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
@@ -31,27 +32,33 @@ def carChoice(sheet):
                 dragC=sheet["C26"].value
                 area=sheet["D26"].value
                 name=sheet["B26"].value
+                count+=1
+
             case 2:
                 dragC=sheet["C27"].value
                 area=sheet["D27"].value
                 name=sheet["B27"].value
+                count+=1
             case 3:
                 dragC=sheet["C28"].value
                 area=sheet["D28"].value
                 name=sheet["B28"].value
+                count+=1
             case 4:
                 dragC=sheet["C29"].value
                 area=sheet["D29"].value
                 name=sheet["B29"].value
+                count+=1
             case 5:
                 dragC=sheet["C30"].value
                 area=sheet["D30"].value
                 name=sheet["B30"].value
+                count+=1
             
             case _: 
             #HR Friendly error message
                 print("ERROR! Selection is invalid\n")
-    return dragC,area,name
+    return dragC,area,name,count
 def getGears(sheet):
     """
     This function takes in the spreadsheet and then uses the sheet to 
@@ -98,14 +105,19 @@ def getdyno(sheet):
     angularvex=sheet["A4":"A15"].value
     torquex=sheet["B4":"B15"].value
     return angularvex,torquex
-def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
+"""def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
+"""
+def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weight):
+    airres=.5*airden*dragC*csA*v**2
+    rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
+    roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
 
-def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weight):
-    
+
+
     angularve=gears*dratio*v/radius
     finaldrivE=fdrive/100
     fx=poly.fit(angularvex,torquex,2)
@@ -113,7 +125,7 @@ def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weigh
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
     acceleration=((traction-roadLoad)*9.81)/weight
-    return traction,torqued,acceleration, angularve
+    return traction,torqued,acceleration, angularve, roadLoad
 
 def loads(weight,tslope,wbase,centerg):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
@@ -164,7 +176,7 @@ def makeres(count,ogsheet,dragC,area):
     newsheet["27B"]=area
     return newsheet
 
-def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name):
+def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS):
     for i in range(0,6):
         hp=calchp(angularve[i],te[i])
         if(angularve[i]>7000 and name!="CR-28"):
@@ -174,7 +186,11 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name):
             te=None
             angularve=None
             hp=None
+            rearloadS=None
+            frontLoadS=None
         newsheet["B{}".format(i+5)]=gears[i]
+        newsheet["E{}".format(i+5)]=rearloadS
+        newsheet["F{}".format(i+5)]=frontLoadS
         newsheet["G{}".format(i+5)]=accel[i]
         newsheet["H{}".format(i+5)]=trac[i]
         newsheet["I{}".format(i+5)]=roadload
