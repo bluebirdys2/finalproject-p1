@@ -77,7 +77,6 @@ def getGears(sheet):
     return gears
 def getothers(sheet):
     
-    val=[]
     for i in range(12,24):
         while(sheet["C{}".format(i)].value<0):
             sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
@@ -114,21 +113,68 @@ def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weigh
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
 
-    acceleration=(((-1*(traction-roadLoad))*9.81)/weight)
+    acceleration=((traction-roadLoad)*9.81)/weight
 
-    return traction,torqued,acceleration
-def hp(angularve,torque):
+    return traction,torqued,acceleration, angularve
+def calchp(angularve,torque):
     hp=torque*angularve/5252
     return hp
     
-def graphs(angularve, torque,name):
-    fx=poly.fit(angularve,torque,2)
-    x=np.linspace(min(angularve),max(angularve),6000)
+def graphs(angularvex, torquex,name):
+    fx=poly.fit(angularvex,torquex,2)
+    x=np.linspace(min(angularvex),max(angularvex),6000)
     fy=fx(x)
     plt.subplot(2,2,1)
-    plt.plot(angularve,torque,"ro")
+    plt.plot(angularvex,torquex,"ro")
     plt.plot(x,fy,"r-")
     plt.title("Experimental dyno data and fit")
     plt.ylabel("engine torque(n m)")
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
+    #
+
+
+
+def makeres(count,ogsheet,dragC,area):
+    workbook=pyxl.load_workbook("All_Results.xlsx")
+    newsheet=workbook["Results_{}".format(count)]
+    newsheet["4A"]="Gears"
+    newsheet["4B"]="Ratio"
+    newsheet["4C"]="WR(N)"
+    newsheet["4D"]="WF(N)"
+    newsheet["4E"]="WRstat(N)"
+    newsheet["4F"]="WFstat(N)"
+    newsheet["4G"]="a(m/s^2)"
+    newsheet["4H"]="P(N)"
+    newsheet["4I"]="R(N)"
+    newsheet["4J"]="HP(hp)"
+    newsheet["4K"]="Te(Nm)"
+    newsheet["4L"]="omega_e(RPM)"
+
+    newsheet["12A"]="DATA"
+    for i in range(12,24):
+        newsheet["A{}".format(i+12)]=ogsheet["B{}".format(i)].value
+        newsheet["B{}".format(i+12)]=ogsheet["C{}".format(i)].value
+    newsheet["26A"]="CD"
+    newsheet["26B"]=dragC
+    newsheet["27A"]="Area"
+    newsheet["27B"]=area
+    return newsheet
+
+def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name):
+    for i in range(0,6):
+        hp=calchp(angularve,te)
+        if(angularve[i]>7000 and name!="CR-28"):
+            accel[i]=None
+            trac[i]=None
+            roadload=None
+            te=None
+            angularve=None
+            hp=None
+        newsheet["B{}".format(i+5)]=gears[i]
+        newsheet["G{}".format(i+5)]=accel[i]
+        newsheet["H{}".format(i+5)]=trac[i]
+        newsheet["I{}".format(i+5)]=roadload
+        newsheet["J{}".format(i+5)]=hp
+        newsheet["K{}".format(i+5)]=te
+        newsheet["L{}".format(i+5)]=angularve
