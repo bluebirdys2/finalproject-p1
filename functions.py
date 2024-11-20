@@ -131,6 +131,7 @@ def loads(weight,tslope,wbase,centerg):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
     rearload=(weight*np.cos(tslope))-frontload
     return rearload,frontload
+
 def calchp(angularve,torque):
     hp=torque*angularve/5252
     return hp
