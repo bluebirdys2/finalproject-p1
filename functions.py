@@ -73,6 +73,7 @@ def getGears(sheet):
         while(sheet["B{}".format(i)].value<0):
             sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
         gears.append(sheet["B{}".format(i)])
+    gears=np.array(gears)
     return gears
 def getothers(sheet):
     
@@ -95,22 +96,25 @@ def getothers(sheet):
     centerg=sheet["C23"].value
     return speed,tslope,wbase,radius,rollre,hA,fdrive,teff,weight,airden,dratio,centerg
 def getdyno(sheet):
-    angularve=sheet["A4":"A15"].value
-    torque=sheet["B4":"B15"].value
-    return angularve,torque
+    angularvex=sheet["A4":"A15"].value
+    torquex=sheet["B4":"B15"].value
+    return angularvex,torquex
 def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
 
-def traction(v,radius,dratio,teff,angularve,torque,fdrive):
+def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex):
     
-    angularvew=v/radius
-    angularvet=dratio*angularvew
+    angularve=gears*dratio*v/radius
     finaldrivE=fdrive/100
-    torqued=finaldrivE*dratio*((teff/100)*(angularve/angularvet)*torque)
+    fx=poly.fit(angularvex,torquex,2)
+    te=fx(angularve)
+    
+    torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
+
     return traction,torqued
     
 def graphs(angularve, torque,name):
