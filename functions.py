@@ -167,7 +167,7 @@ def makeres(count,ogsheet,dragC,area):
 
 def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name):
     for i in range(0,6):
-        hp=calchp(angularve,te)
+        hp=calchp(angularve[i],te[i])
         if(angularve[i]>7000 and name!="CR-28"):
             accel[i]=None
             trac[i]=None
@@ -180,5 +180,5 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name):
         newsheet["H{}".format(i+5)]=trac[i]
         newsheet["I{}".format(i+5)]=roadload
         newsheet["J{}".format(i+5)]=hp
-        newsheet["K{}".format(i+5)]=te
-        newsheet["L{}".format(i+5)]=angularve
+        newsheet["K{}".format(i+5)]=te[i]
+        newsheet["L{}".format(i+5)]=angularve[i]
