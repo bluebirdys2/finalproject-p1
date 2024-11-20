@@ -82,7 +82,7 @@ def getothers(sheet):
         while(sheet["C{}".format(i)].value<0):
             sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
  
-    speed=sheet["C12"].value
+    speed=sheet["C12"].value /3.6
     tslope=sheet["C13"].value
     wbase=sheet["C14"].value
     radius=sheet["C15"].value
@@ -120,6 +120,9 @@ def loads(weight,tslope,wbase,centerg):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
     rearload=(weight*np.cos(tslope))-frontload
     return rearload,frontload
+def hp(angularve,torque):
+    hp=torque*angularve/5252
+    return hp
     
 def graphs(angularve, torque,name):
     fx=poly.fit(angularve,torque,2)
