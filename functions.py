@@ -105,17 +105,18 @@ def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
 
-def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex):
+def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weight):
     
     angularve=gears*dratio*v/radius
     finaldrivE=fdrive/100
     fx=poly.fit(angularvex,torquex,2)
     te=fx(angularve)
-    
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
 
-    return traction,torqued
+    acceleration=(((-1*(traction-roadLoad))*9.81)/weight)
+
+    return traction,torqued,acceleration
     
 def graphs(angularve, torque,name):
     fx=poly.fit(angularve,torque,2)
