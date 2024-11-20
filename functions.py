@@ -82,7 +82,7 @@ def getothers(sheet):
         while(sheet["C{}".format(i)].value<0):
             sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
  
-    speed=sheet["C12"].value
+    speed=sheet["C12"].value /3.6
     tslope=sheet["C13"].value
     wbase=sheet["C14"].value
     radius=sheet["C15"].value
@@ -117,6 +117,9 @@ def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weigh
     acceleration=(((-1*(traction-roadLoad))*9.81)/weight)
 
     return traction,torqued,acceleration
+def hp(angularve,torque):
+    hp=torque*angularve/5252
+    return hp
     
 def graphs(angularve, torque,name):
     fx=poly.fit(angularve,torque,2)
