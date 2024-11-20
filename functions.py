@@ -116,7 +116,7 @@ def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weigh
 
     acceleration=(((-1*(traction-roadLoad))*9.81)/weight)
 
-    return traction,torqued,acceleration
+    return traction,torqued,acceleration,angularve
 def hp(angularve,torque):
     hp=torque*angularve/5252
     return hp
