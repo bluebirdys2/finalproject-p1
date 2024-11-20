@@ -19,36 +19,37 @@ def carChoice(sheet):
     
     
     """
-    option=0
+    option=0 #initiales loop
+    #prompts user for what car they want data on
     print("**********************************************")
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
     print("**********************************************")
-    while(option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
+    while(option!=5 and option!=4 and option!=3 and option!=2 and option!=1): #loop is active while 'option' value is invalid
 
         option=int(input("Select the car choice options (1-5) "))
         match option:
-            case 1:
+            case 1: #Ford Escape Hybrid
                 dragC=sheet["C26"].value
                 area=sheet["D26"].value
                 name=sheet["B26"].value
-            case 2:
+            case 2: #Toyota Camery
                 dragC=sheet["C27"].value
                 area=sheet["D27"].value
                 name=sheet["B27"].value
-            case 3:
+            case 3: #Smart Roadster Coupe
                 dragC=sheet["C28"].value
                 area=sheet["D28"].value
                 name=sheet["B28"].value
-            case 4:
+            case 4: #Toyota Prius
                 dragC=sheet["C29"].value
                 area=sheet["D29"].value
                 name=sheet["B29"].value
-            case 5:
+            case 5: #Chevrolet Volt
                 dragC=sheet["C30"].value
                 area=sheet["D30"].value
                 name=sheet["B30"].value
             
-            case _: 
+            case _:
             #HR Friendly error message
                 print("ERROR! Selection is invalid\n")
     return dragC,area,name
@@ -68,16 +69,18 @@ def getGears(sheet):
     gear5: 5th gear, gear ratio
     gear6: 6th gear, gear ratio
     """
+    #Checks to see if gear value is invalid and forces user to correct it if needed
     gears=[]
     for i in range(12,24):
-        while(sheet["B{}".format(i)].value<0):
+        while(sheet["B{}".format(i)].value<0): 
             sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
         gears.append(sheet["B{}".format(i)])
     gears=np.array(gears)
     return gears
 def getothers(sheet):
-    
-    for i in range(12,24):
+    #Checks to see if other values, mostly constants, are invalid
+    val=[]
+    for i in range(12,24): 
         while(sheet["C{}".format(i)].value<0):
             sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
  
@@ -94,16 +97,19 @@ def getothers(sheet):
     dratio=sheet["C22"].value
     centerg=sheet["C23"].value
     return speed,tslope,wbase,radius,rollre,hA,fdrive,teff,weight,airden,dratio,centerg
-def getdyno(sheet):
+#gets separate arrays for both 'anglarvex' and 'torquex' from the Dyno
+def getdyno(sheet): 
     angularvex=sheet["A4":"A15"].value
     torquex=sheet["B4":"B15"].value
     return angularvex,torquex
-def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
+#road load calculations
+def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v): 
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
 
+#Calculates traction
 def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weight):
     
     angularve=gears*dratio*v/radius
@@ -112,72 +118,26 @@ def traction(v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weigh
     te=fx(angularve)
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
-    acceleration=((traction-roadLoad)*9.81)/weight
-    return traction,torqued,acceleration, angularve
-
+    acceleration=(((-1*(traction-roadLoad))*9.81)/weight)
+    return traction,torqued,acceleration
+#Calculates front and rear axle load
 def loads(weight,tslope,wbase,centerg):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
     rearload=(weight*np.cos(tslope))-frontload
     return rearload,frontload
-def calchp(angularve,torque):
+#Calculates horsepower
+def hp(angularve,torque):
     hp=torque*angularve/5252
     return hp
-    
-def graphs(angularvex, torquex,name):
-    fx=poly.fit(angularvex,torquex,2)
-    x=np.linspace(min(angularvex),max(angularvex),6000)
+#Graph configurations    
+def graphs(angularve, torque,name):
+    fx=poly.fit(angularve,torque,2)
+    x=np.linspace(min(angularve),max(angularve),6000)
     fy=fx(x)
     plt.subplot(2,2,1)
-    plt.plot(angularvex,torquex,"ro")
+    plt.plot(angularve,torque,"ro")
     plt.plot(x,fy,"r-")
     plt.title("Experimental dyno data and fit")
     plt.ylabel("engine torque(n m)")
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
-    #
-
-
-
-def makeres(count,ogsheet,dragC,area):
-    workbook=pyxl.load_workbook("All_Results.xlsx")
-    newsheet=workbook["Results_{}".format(count)]
-    newsheet["4A"]="Gears"
-    newsheet["4B"]="Ratio"
-    newsheet["4C"]="WR(N)"
-    newsheet["4D"]="WF(N)"
-    newsheet["4E"]="WRstat(N)"
-    newsheet["4F"]="WFstat(N)"
-    newsheet["4G"]="a(m/s^2)"
-    newsheet["4H"]="P(N)"
-    newsheet["4I"]="R(N)"
-    newsheet["4J"]="HP(hp)"
-    newsheet["4K"]="Te(Nm)"
-    newsheet["4L"]="omega_e(RPM)"
-
-    newsheet["12A"]="DATA"
-    for i in range(12,24):
-        newsheet["A{}".format(i+12)]=ogsheet["B{}".format(i)].value
-        newsheet["B{}".format(i+12)]=ogsheet["C{}".format(i)].value
-    newsheet["26A"]="CD"
-    newsheet["26B"]=dragC
-    newsheet["27A"]="Area"
-    newsheet["27B"]=area
-    return newsheet
-
-def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name):
-    for i in range(0,6):
-        hp=calchp(angularve[i],te[i])
-        if(angularve[i]>7000 and name!="CR-28"):
-            accel[i]=None
-            trac[i]=None
-            roadload=None
-            te=None
-            angularve=None
-            hp=None
-        newsheet["B{}".format(i+5)]=gears[i]
-        newsheet["G{}".format(i+5)]=accel[i]
-        newsheet["H{}".format(i+5)]=trac[i]
-        newsheet["I{}".format(i+5)]=roadload
-        newsheet["J{}".format(i+5)]=hp
-        newsheet["K{}".format(i+5)]=te[i]
-        newsheet["L{}".format(i+5)]=angularve[i]
