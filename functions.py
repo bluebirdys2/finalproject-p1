@@ -131,7 +131,10 @@ def loads(weight,tslope,wbase,centerg,airres,hA):
     frontload=(airres*0.6)+(weight/9.81)*hA-(wbase-centerg)*weight*np.cos(tslope)+weight*np.sin(tslope)*hA
     rearload=(airres*0.6)+(weight/9.81)*hA-(centerg)*weight*np.cos(tslope)+weight*np.sin(tslope)*hA
 
-    return rearload,frontload
+    frontloads=(weight*np.cos(tslope)*centerg)/wbase
+    rearloads=(weight*np.cos(tslope))-frontload
+
+    return rearload,frontload,frontloads,rearloads
 def hp(angularve,torque,tslope,centerg,wbase,weight):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
     rearload=(weight*np.cos(tslope))-frontload
