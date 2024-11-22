@@ -125,16 +125,14 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
     acceleration=((((traction-roadLoad))*9.81)/weight)
-    return traction,torqued,acceleration
-    acceleration=((traction-roadLoad)*9.81)/weight
     return traction,torqued,acceleration, angularve, roadLoad
 
-def loads(weight,tslope,wbase,centerg):
-    frontloads=(weight*np.cos(tslope)*centerg)/wbase
-    rearloads=(weight*np.cos(tslope))-frontloads
-    rearload=rearloads+(centerg)
-    return rearloads,frontloads
-def hp(angularve,torque):
+def loads(weight,tslope,wbase,centerg,airres,hA):
+    frontload=(airres*0.6)+(weight/9.81)*hA-(wbase-centerg)*weight*np.cos(tslope)+weight*np.sin(tslope)*hA
+    rearload=(airres*0.6)+(weight/9.81)*hA-(centerg)*weight*np.cos(tslope)+weight*np.sin(tslope)*hA
+
+    return rearload,frontload
+def hp(angularve,torque,tslope,centerg,wbase,weight):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
     rearload=(weight*np.cos(tslope))-frontload
     return rearload,frontload
