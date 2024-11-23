@@ -24,7 +24,7 @@ def carChoice(sheet):
     print("**********************************************")
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
     print("**********************************************")
-    while(option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
+    while(option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
 
         option=int(input("Select the car choice options (1-5) "))
         match option:
@@ -55,7 +55,13 @@ def carChoice(sheet):
                 name=sheet["B30"].value
                 count+=1
             
-            case _: 
+            case 6: 
+                dragC=sheet["C31"].value
+                area=sheet["D31"].value
+                name=sheet["B31"].value
+                count+=1
+
+            case _:
             #HR Friendly error message
                 print("ERROR! Selection is invalid\n")
     return dragC,area,name,count
@@ -89,7 +95,7 @@ def getothers(sheet):
             sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
  
     speed=sheet["C12"].value /3.6
-    tslope=sheet["C13"].value
+    tslope=sheet["C13"].value/100
     wbase=sheet["C14"].value
     radius=sheet["C15"].value
     rollre=sheet["C16"].value
@@ -111,10 +117,10 @@ def getdyno(sheet):
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
 """
-def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,weight):
+def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad):
     airres=.5*airden*dragC*csA*v**2
-    rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
-    roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
+    rRoll=rollres*weight*np.cos((np.atan(tslope)))
+    roadLoad=rRoll+weight*np.sin((np.atan(tslope)))+airres
 
 
 
@@ -128,13 +134,19 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     return traction,torqued,acceleration, angularve, roadLoad
 
 def loads(weight,tslope,wbase,centerg,airres,hA):
-    frontload=(airres*0.6)+(weight/9.81)*hA-(wbase-centerg)*weight*np.cos(tslope)+weight*np.sin(tslope)*hA
-    rearload=(airres*0.6)+(weight/9.81)*hA-(centerg)*weight*np.cos(tslope)+weight*np.sin(tslope)*hA
+    Wperp=weight*np.cos(tslope)
+    
+    
+    frontload=(airres*0.6)+(weight/9.81)*hA-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA
+    rearload=(airres*0.6)+(weight/9.81)*hA-(centerg)*Wperp+weight*np.sin(tslope)*hA
 
-    frontloads=(weight*np.cos(tslope)*centerg)/wbase
-    rearloads=(weight*np.cos(tslope))-frontload
+    frontloads=(Wperp*(wbase-centerg)-weight*np.sin(tslope)*hA)/(wbase)
+    rearloads=(Wperp*centerg+weight*np.sin(tslope)*hA)/wbase
+    #frontloads=(weight*np.cos(tslope)*centerg)/wbase
+    #rearloads=(weight*np.cos(tslope))-frontload
 
     return rearload,frontload,frontloads,rearloads
+
 def hp(angularve,torque,tslope,centerg,wbase,weight):
     frontload=(weight*np.cos(tslope)*centerg)/wbase
     rearload=(weight*np.cos(tslope))-frontload
