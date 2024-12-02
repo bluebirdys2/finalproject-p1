@@ -101,7 +101,7 @@ def getothers(sheet):
     tslope=sheet["C13"].value/100
     wbase=sheet["C14"].value
     radius=sheet["C15"].value
-    rollre=sheet["C16"].value
+    rollres=sheet["C16"].value
     hA=sheet["C17"].value
     fdrive=sheet["C18"].value
     teff=sheet["C19"].value
@@ -109,7 +109,7 @@ def getothers(sheet):
     airden=sheet["C21"].value
     dratio=sheet["C22"].value
     centerg=sheet["C23"].value
-    return speed,tslope,wbase,radius,rollre,hA,fdrive,teff,weight,airden,dratio,centerg
+    return speed,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg
 
 def getdyno(sheet):
     angularvex=sheet["A4":"A15"].value
