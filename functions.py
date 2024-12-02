@@ -92,7 +92,7 @@ def getGears(sheet):
     for i in range(4,10):
         while(sheet["B{}".format(i)].value<0):
             sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
-        gears.append(sheet["B{}".format(i)])
+        gears.append(sheet["B{}".format(i)].value)
     gears=np.array(gears)
     return gears
 def getothers(sheet):
