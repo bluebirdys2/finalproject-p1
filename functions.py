@@ -89,7 +89,7 @@ def getGears(sheet):
     gear6: 6th gear, gear ratio
     """
     gears=[]
-    for i in range(12,24):
+    for i in range(4,10):
         while(sheet["B{}".format(i)].value<0):
             sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
         gears.append(sheet["B{}".format(i)])
@@ -116,8 +116,9 @@ def getothers(sheet):
     return speed,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg
 
 def getdyno(sheet):
-    angularvex=sheet["A4":"A15"].value
-    torquex=sheet["B4":"B15"].value
+    for i in range(4,16):
+        angularvex=sheet["A{}".format(i)].value
+        torquex=sheet["B{}".format(i)].value
     return angularvex,torquex
 """def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
@@ -154,7 +155,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     #rearloads=(weight*np.cos(tslope))-frontload
 
 
-    return traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads
+    return traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te
 
 
 

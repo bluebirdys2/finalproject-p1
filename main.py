@@ -7,11 +7,11 @@ import functions
 import openpyxl as pyxl
 
 #   Defines the Excel file in which all the given data is stored
-workbook = pyxl.load_workbook("data.xlsx")
+workbook1 = pyxl.load_workbook("data.xlsx")
 
 
 #   Calls a function that returns the drag coefficient, cross sectional area, and name of car selected by the user
-dragC,csA,name,sheet = functions.carChoice(workbook)
+dragC,csA,name,count,sheet = functions.carChoice(workbook1)
 
 #   Returns the gear ratios from the excel file 
 gears = functions.getGears(sheet)
@@ -23,7 +23,10 @@ v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = func
 angularvex,torquex = functions.getdyno(sheet)
 
 #   Function that calculates roadload given rollres,weight,tslope,airden,dragC,csA, and v
-traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads=functions.doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
+traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=functions.doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
 
 #   Outputs graphs
-functions.graphs(angularve, torqued,name)
+#functions.graphs(angularve, torqued,name)
+workbook2=pyxl.load_workbook("finalPResults.xlsx")
+newsheet=functions.makeres(count,sheet,dragC,csA)
+functions.outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
