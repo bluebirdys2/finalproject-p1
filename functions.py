@@ -148,15 +148,10 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     frontload=((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
     rearload=((airres*hA)+(weight/9.81)*hA*acceleration+(centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
 
-<<<<<<< Updated upstream
     frontloads=(Wperp*(wbase-centerg))/(wbase)
     rearloads=(Wperp*centerg)/wbase
     #frontloads=(weight*np.cos(tslope)*centerg)/wbase
     #rearloads=(weight*np.cos(tslope))-frontload
-=======
-    frontloads=(Wperp*(wbase-centerg)-weight*np.sin(tslope)*hA)/(wbase)
-    rearloads=(Wperp*centerg+weight*np.sin(tslope)*hA)/wbase
->>>>>>> Stashed changes
 
 
     return traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads
