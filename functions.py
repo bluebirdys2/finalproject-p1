@@ -144,11 +144,11 @@ def loads(weight,tslope,wbase,centerg,airres,hA,acceleration):
     Wperp=weight*np.cos(tslope)
     
     
-    frontload=(airres*centerg)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA
-    rearload=(airres*centerg)+(weight/9.81)*hA*acceleration-(centerg)*Wperp+weight*np.sin(tslope)*hA
+    frontload=((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
+    rearload=((airres*hA)+(weight/9.81)*hA*acceleration+(centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
 
-    frontloads=(Wperp*(wbase-centerg)-weight*np.sin(tslope)*hA)/(wbase)
-    rearloads=(Wperp*centerg+weight*np.sin(tslope)*hA)/wbase
+    frontloads=(Wperp*(wbase-centerg))/(wbase)
+    rearloads=(Wperp*centerg)/wbase
     #frontloads=(weight*np.cos(tslope)*centerg)/wbase
     #rearloads=(weight*np.cos(tslope))-frontload
 
