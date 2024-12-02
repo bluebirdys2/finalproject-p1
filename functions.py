@@ -5,9 +5,9 @@ import openpyxl as pyxl
 import matplotlib.pyplot as plt
 from numpy.polynomial import Polynomial as poly
 workbook= pyxl.load_workbook("data.xlsx")
-sheetmain = workbook["Problem Variables"]
 
-def carChoice(sheet):
+
+def carChoice(woorkbook):
     """
     This function gives the user an option for which car they want
     and then returns the drag coefficient and area of front bumbper
@@ -25,7 +25,7 @@ def carChoice(sheet):
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
     print("**********************************************")
     while(option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
-
+        sheet = workbook["Problem Variables"]
         option=int(input("Select the car choice options (1-5) "))
         match option:
             case 1:
@@ -56,6 +56,7 @@ def carChoice(sheet):
                 count+=1
             
             case 6: 
+                sheet=workbook["cr-28 var"]
                 dragC=sheet["C31"].value
                 area=sheet["D31"].value
                 name=sheet["B31"].value
@@ -126,7 +127,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
 
     angularve=gears*dratio*v/radius
     finaldrivE=fdrive/100
-    if(name!="F1"):
+    if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
     else:
         fx=poly.fit(angularvex,torquex,5)
@@ -150,10 +151,10 @@ def loads(weight,tslope,wbase,centerg,airres,hA,acceleration):
 
     return rearload,frontload,frontloads,rearloads
 
-def hp(angularve,torque,tslope,centerg,wbase,weight):
-    frontload=(weight*np.cos(tslope)*centerg)/wbase
-    rearload=(weight*np.cos(tslope))-frontload
-    return rearload,frontload
+#def hp(angularve,torque,tslope,centerg,wbase,weight):
+#    frontload=(weight*np.cos(tslope)*centerg)/wbase
+#    rearload=(weight*np.cos(tslope))-frontload
+#    return rearload,frontload
 
 def calchp(angularve,torque):
     hp=torque*angularve/5252
