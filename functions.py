@@ -21,45 +21,47 @@ def carChoice(woorkbook):
     """
     count=0
     option=0
+    sheet1=workbook["Problem Variables"]
+    sheet2=workbook["cr-28 var"]
     print("**********************************************")
-    print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}".format(sheet["B26"].value,sheet["A26"].value,sheet["B27"].value,sheet["A27"].value, sheet["B28"].value,sheet["A28"].value,sheet["B29"].value,sheet["A29"].value,sheet["B30"].value,sheet["A30"].value))
+    print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}\n6. {} {}".format(sheet1["B26"].value,sheet1["A26"].value,sheet1["B27"].value,sheet1["A27"].value, sheet1["B28"].value,sheet1["A28"].value,sheet1["B29"].value,sheet1["A29"].value,sheet1["B30"].value,sheet1["A30"].value,sheet2["B26"].value,sheet2["A26"].value))
     print("**********************************************")
     while(option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
-        sheet = workbook["Problem Variables"]
-        option=int(input("Select the car choice options (1-5) "))
+        
+        option=int(input("Select the car choice options (1-6) "))
         match option:
             case 1:
-                dragC=sheet["C26"].value
-                area=sheet["D26"].value
-                name=sheet["B26"].value
+                dragC=sheet1["C26"].value
+                area=sheet1["D26"].value
+                name=sheet1["A26"].value
                 count+=1
 
             case 2:
-                dragC=sheet["C27"].value
-                area=sheet["D27"].value
-                name=sheet["B27"].value
+                dragC=sheet1["C27"].value
+                area=sheet1["D27"].value
+                name=sheet1["A27"].value
                 count+=1
             case 3:
-                dragC=sheet["C28"].value
-                area=sheet["D28"].value
-                name=sheet["B28"].value
+                dragC=sheet1["C28"].value
+                area=sheet1["D28"].value
+                name=sheet1["A28"].value
                 count+=1
             case 4:
-                dragC=sheet["C29"].value
-                area=sheet["D29"].value
-                name=sheet["B29"].value
+                dragC=sheet1["C29"].value
+                area=sheet1["D29"].value
+                name=sheet1["A29"].value
                 count+=1
             case 5:
-                dragC=sheet["C30"].value
-                area=sheet["D30"].value
-                name=sheet["B30"].value
+                dragC=sheet1["C30"].value
+                area=sheet1["D30"].value
+                name=sheet1["A30"].value
                 count+=1
             
             case 6: 
-                sheet=workbook["cr-28 var"]
-                dragC=sheet["C31"].value
-                area=sheet["D31"].value
-                name=sheet["B31"].value
+                
+                dragC=sheet2["C26"].value
+                area=sheet2["D26"].value
+                name=sheet2["A26"].value
                 count+=1
 
             case _:
@@ -108,6 +110,7 @@ def getothers(sheet):
     dratio=sheet["C22"].value
     centerg=sheet["C23"].value
     return speed,tslope,wbase,radius,rollre,hA,fdrive,teff,weight,airden,dratio,centerg
+
 def getdyno(sheet):
     angularvex=sheet["A4":"A15"].value
     torquex=sheet["B4":"B15"].value
@@ -157,11 +160,15 @@ def loads(weight,tslope,wbase,centerg,airres,hA):
 #    return rearload,frontload
 
 def calchp(angularve,torque):
-    hp=torque*angularve/5252
+    hp=torque*angularve*0.7375621493/5252
     return hp
     
 def graphs(angularvex, torquex,name):
-    fx=poly.fit(angularvex,torquex,4)
+    #dyno graph
+    if(name!="cr-28"):
+        fx=poly.fit(angularvex,torquex,4)
+    else:
+        fx=poly.fit(angularvex,torquex,5)
     x=np.linspace(min(angularvex),max(angularvex),6000)
     fy=fx(x)
     plt.subplot(2,2,1)
