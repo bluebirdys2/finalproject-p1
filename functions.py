@@ -117,7 +117,7 @@ def getdyno(sheet):
     roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
     return roadLoad
 """
-def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad):
+def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,roadLoad,name):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope)))+airres
@@ -126,7 +126,10 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
 
     angularve=gears*dratio*v/radius
     finaldrivE=fdrive/100
-    fx=poly.fit(angularvex,torquex,4)
+    if(name!="F1"):
+        fx=poly.fit(angularvex,torquex,4)
+    else:
+        fx=poly.fit(angularvex,torquex,5)
     te=fx(angularve)
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
@@ -157,7 +160,7 @@ def calchp(angularve,torque):
     return hp
     
 def graphs(angularvex, torquex,name):
-    fx=poly.fit(angularvex,torquex,2)
+    fx=poly.fit(angularvex,torquex,4)
     x=np.linspace(min(angularvex),max(angularvex),6000)
     fy=fx(x)
     plt.subplot(2,2,1)
