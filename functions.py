@@ -123,12 +123,13 @@ def graphs(angularvex, torquex,name):
 
 
 def makeres(count,ogsheet,dragC,area):
-
-    workbook=pyxl.load_workbook("All_Results.xlsx")
+    
+    results=pyxl.Workbook()
+    
     try:
-        newsheet=workbook["Results_{}".format(count)]
+        newsheet=results["Results_{}".format(count)]
     except KeyError:
-        newsheet=workbook.create_sheet("Results_{}".format(count))
+        newsheet=results.create_sheet("Results_{}".format(count))
     newsheet["A4"]="Gears"
     newsheet["B4"]="Ratio"
     newsheet["C4"]="WR(N)"
@@ -143,16 +144,16 @@ def makeres(count,ogsheet,dragC,area):
     newsheet["L4"]="omega_e(RPM)"
     newsheet["A12"]="DATA"
     for i in range(12,24):
-        newsheet["A{}".format(i+12)]=ogsheet["B{}".format(i)].value
-        newsheet["B{}".format(i+12)]=ogsheet["C{}".format(i)].value
+        newsheet["A{}".format(i)]=ogsheet["B{}".format(i)].value
+        newsheet["B{}".format(i)]=ogsheet["C{}".format(i)].value
     newsheet["A26"]="CD"
     newsheet["B26"]=dragC
     newsheet["A27"]="Area"
     newsheet["B27"]=area
-    workbook.save("All_Results.xlsx")
-    return newsheet
+    results.save("All_Results.xlsx")
+    return newsheet,results
 
-def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS,frontLoad,rearLoad):
+def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS,frontLoad,rearLoad,results):
     for i in range(0,6):
         hp=calchp(angularve[i],te[i])
         if(angularve[i]>7000 and name!="CR-28"):
@@ -177,7 +178,7 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,front
         newsheet["L{}".format(i+5)]=angularve[i]
         newsheet["C{}".format(i+5)]=rearLoad[i]
         newsheet["D{}".format(i+5)]=frontLoad[i]
-        workbook.save("All_Results.xlsx")
+        results.save("All_Results.xlsx")
 
 
 
@@ -271,6 +272,6 @@ def carChoice(workbook):
             #functions.graphs(angularve, torqued,name)
             print("yay")
             graphs(angularvex, torquex,name)
-            newsheet=makeres(count,sheet,dragC,area)    
-            outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
+            newsheet,results=makeres(count,sheet,dragC,area)    
+            outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload,results)
             
