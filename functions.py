@@ -123,12 +123,15 @@ def graphs(angularvex, torquex,name):
 
 
 def makeres(count,ogsheet,dragC,area):
-    
-    results=pyxl.Workbook()
+    try:
+        results=pyxl.load_workbook("All_Results.xlsx")
+    except FileNotFoundError:
+        results=pyxl.Workbook()
     
     try:
         newsheet=results["Results_{}".format(count)]
     except KeyError:
+        print("new sheet made #{} ".format(count))
         newsheet=results.create_sheet("Results_{}".format(count))
     newsheet["A4"]="Gears"
     newsheet["B4"]="Ratio"
@@ -150,6 +153,13 @@ def makeres(count,ogsheet,dragC,area):
     newsheet["B26"]=dragC
     newsheet["A27"]="Area"
     newsheet["B27"]=area
+    newsheet["A5"]="1st"
+    newsheet["A6"]="2nd"
+    newsheet["A7"]="3rd"
+    newsheet["A8"]="4th"
+    newsheet["A9"]="5th"
+    newsheet["A10"]="6th"
+
     results.save("All_Results.xlsx")
     return newsheet,results
 
@@ -264,13 +274,13 @@ def carChoice(workbook):
                 dynosheet=workbook["cr-dyno"]
             
             angularvex,torquex = getdyno(dynosheet)
-            print("dyno gotten")
+            
             #   Function that calculates roadload given rollres,weight,tslope,airden,dragC,csA, and v
             traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=doMath(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
-            print("math done")
+            
             #   Outputs graphs
             #functions.graphs(angularve, torqued,name)
-            print("yay")
+            
             graphs(angularvex, torquex,name)
             newsheet,results=makeres(count,sheet,dragC,area)    
             outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload,results)
