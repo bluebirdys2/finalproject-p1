@@ -91,8 +91,6 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
 
     frontloads=(Wperp*(wbase-centerg))/(wbase)
     rearloads=(Wperp*centerg)/wbase
-    #frontloads=(weight*np.cos(tslope)*centerg)/wbase
-    #rearloads=(weight*np.cos(tslope))-frontload
 
 
     return traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te
@@ -122,12 +120,16 @@ def graphs(angularvex, torquex,name,torqued,gears,acceleration):
 
     plt.subplot(2,2,1)
     plt.plot(angularvex,torquex,"ro")
-    plt.plot(x,fy,"r-")
-    plt.plot(torqued,acceleration,"r-")
+    plt.plot(x,fy,"b-")
     plt.title("Experimental dyno data and fit")
     plt.ylabel("engine torque(n m)")
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
+    plt.subplot(2,2,2)
+    plt.plot(acceleration,torqued,"ro")
+    plt.title("Drivetrain Torque V.S. Acceleration")
+    plt.tight_layout
+    plt.show()
     
     #
 
