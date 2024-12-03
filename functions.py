@@ -73,7 +73,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
 
 
 
-    angularve=gears*dratio*v/radius
+    angularve=gears*dratio*v*60/(radius*2*np.pi)
     finaldrivE=fdrive/100
     if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
@@ -190,12 +190,13 @@ def makeres(count,ogsheet,dragC,area):
 def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS,frontLoad,rearLoad,results):
     for i in range(0,6):
         hp=calchp(angularve[i],te[i])
+        #errors here
         if(angularve[i]>7000 and name!="CR-28"):
             accel[i]=None
             trac[i]=None
             roadload=None
-            te=None
-            angularve=None
+            te[i]=None
+            angularve[i]=None
             hp=None
             rearloadS=None
             frontLoadS=None
@@ -208,6 +209,7 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,front
         newsheet["H{}".format(i+5)]=trac[i]
         newsheet["I{}".format(i+5)]=roadload
         newsheet["J{}".format(i+5)]=hp
+        
         newsheet["K{}".format(i+5)]=te[i]
         newsheet["L{}".format(i+5)]=angularve[i]
         newsheet["C{}".format(i+5)]=rearLoad[i]
