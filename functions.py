@@ -141,6 +141,7 @@ def makeres(count,ogsheet,dragC,area):
     returns:
     newsheet= sheet that would contain new results
     results= workbook that contains results
+
     """
     try:
         #tests to see if file exists
@@ -154,7 +155,7 @@ def makeres(count,ogsheet,dragC,area):
         newsheet=results["Results_{}".format(count)]
     except KeyError:
         #creates sheet if the sheet does not exist
-        print("new sheet made #{} ".format(count))
+        
         newsheet=results.create_sheet("Results_{}".format(count))
     #prints all predetermined info
     newsheet["A4"]="Gears"
@@ -198,13 +199,13 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,front
             newsheet["H{}".format(i+5)]="OOR"
             newsheet["I{}".format(i+5)]="OOR"
             newsheet["J{}".format(i+5)]="OOR"
-        
+            newsheet["B{}".format(i+5)]=gears[i]
             newsheet["K{}".format(i+5)]="OOR"
             newsheet["L{}".format(i+5)]="OOR"
             newsheet["C{}".format(i+5)]="OOR"
             newsheet["D{}".format(i+5)]="OOR"
         else:
-            print("cool output")
+            
             newsheet["B{}".format(i+5)]=gears[i]
             newsheet["E{}".format(i+5)]=rearloadS
             newsheet["F{}".format(i+5)]=frontLoadS
@@ -299,11 +300,11 @@ def main(workbook):
             dragC,area,name,count,sheet,option=carChoice(workbook)
             if(option!=7):
                 gears = getGears(sheet)
-                print("gears gotten")
+                
                 #   Function that returns all other varibles in the excel for use by later functions
             
                 v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = getothers(sheet)
-                print("other stuff gotten")
+                
                 # Function that returns angularvex and torquex
                 if(name!="cr-28"):
                     dynosheet=workbook["Dynamometer"]
