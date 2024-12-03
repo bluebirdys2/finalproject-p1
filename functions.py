@@ -245,7 +245,6 @@ def carChoice(workbook):
     option=0
     while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
         
-<<<<<<< Updated upstream
         option=int(input("Select the car choice options (1-6) "))
         match option:
             case 1:
@@ -254,16 +253,6 @@ def carChoice(workbook):
                 name=sheet1["A26"].value
                 count+=1
                 sheet=sheet1
-=======
-            option=int(input("Select the car choice options (1-7) "))
-            match option:
-                case 1:
-                    dragC=sheet1["C26"].value
-                    area=sheet1["D26"].value
-                    name=sheet1["A26"].value
-                    count+=1
-                    sheet=sheet1
->>>>>>> Stashed changes
 
             case 2:
                 dragC=sheet1["C27"].value
