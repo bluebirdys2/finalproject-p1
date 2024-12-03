@@ -35,7 +35,7 @@ def getothers(sheet):
     for i in range(12,24):
         while(sheet["C{}".format(i)].value<0):
             sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
- 
+    
     speed=sheet["C12"].value /3.6
     tslope=sheet["C13"].value/100
     wbase=sheet["C14"].value
@@ -125,7 +125,10 @@ def graphs(angularvex, torquex,name):
 def makeres(count,ogsheet,dragC,area):
 
     workbook=pyxl.load_workbook("All_Results.xlsx")
-    newsheet=workbook["Results_{}".format(count)]
+    try:
+        newsheet=workbook["Results_{}".format(count)]
+    except KeyError:
+        newsheet=workbook.create_sheet("Results_{}".format(count))
     newsheet["4A"]="Gears"
     newsheet["4B"]="Ratio"
     newsheet["4C"]="WR(N)"
