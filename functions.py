@@ -105,7 +105,7 @@ def calchp(angularve,torque):
     
 def graphs(angularvex, torquex,name):
     #dyno graph
-    if(name!="cr-28"):
+    if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
     else:
         fx=poly.fit(angularvex,torquex,5)
@@ -129,27 +129,26 @@ def makeres(count,ogsheet,dragC,area):
         newsheet=workbook["Results_{}".format(count)]
     except KeyError:
         newsheet=workbook.create_sheet("Results_{}".format(count))
-    newsheet["4A"]="Gears"
-    newsheet["4B"]="Ratio"
-    newsheet["4C"]="WR(N)"
-    newsheet["4D"]="WF(N)"
-    newsheet["4E"]="WRstat(N)"
-    newsheet["4F"]="WFstat(N)"
-    newsheet["4G"]="a(m/s^2)"
-    newsheet["4H"]="P(N)"
-    newsheet["4I"]="R(N)"
-    newsheet["4J"]="HP(hp)"
-    newsheet["4K"]="Te(Nm)"
-    newsheet["4L"]="omega_e(RPM)"
-
-    newsheet["12A"]="DATA"
+    newsheet["A4"]="Gears"
+    newsheet["B4"]="Ratio"
+    newsheet["C4"]="WR(N)"
+    newsheet["D4"]="WF(N)"
+    newsheet["E4"]="WRstat(N)"
+    newsheet["F4"]="WFstat(N)"
+    newsheet["G4"]="a(m/s^2)"
+    newsheet["H4"]="P(N)"
+    newsheet["I4"]="R(N)"
+    newsheet["J4"]="HP(hp)"
+    newsheet["K4"]="Te(Nm)"
+    newsheet["L4"]="omega_e(RPM)"
+    newsheet["A12"]="DATA"
     for i in range(12,24):
         newsheet["A{}".format(i+12)]=ogsheet["B{}".format(i)].value
         newsheet["B{}".format(i+12)]=ogsheet["C{}".format(i)].value
-    newsheet["26A"]="CD"
-    newsheet["26B"]=dragC
-    newsheet["27A"]="Area"
-    newsheet["27B"]=area
+    newsheet["A26"]="CD"
+    newsheet["B26"]=dragC
+    newsheet["A27"]="Area"
+    newsheet["B27"]=area
     return newsheet
 
 def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS,frontLoad,rearLoad):
@@ -248,22 +247,26 @@ def carChoice(workbook):
                     print("ERROR! Selection is invalid\n")
         if(option!=7):
             gears = getGears(sheet)
-
+            print("gears gotten")
             #   Function that returns all other varibles in the excel for use by later functions
+            
             v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = getothers(sheet)
-
+            print("other stuff gotten")
             # Function that returns angularvex and torquex
             if(name!="cr-28"):
                 dynosheet=workbook["Dynamometer"]
             else:
                 dynosheet=workbook["cr-dyno"]
+            
             angularvex,torquex = getdyno(dynosheet)
-
+            print("dyno gotten")
             #   Function that calculates roadload given rollres,weight,tslope,airden,dragC,csA, and v
             traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=doMath(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
-
+            print("math done")
             #   Outputs graphs
             #functions.graphs(angularve, torqued,name)
-
-            newsheet=makeres(count,sheet,dragC,area)    
-            outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
+            print("yay")
+            graphs(angularvex, torquex,name)
+            #newsheet=makeres(count,sheet,dragC,area)    
+            #outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
+            
