@@ -30,4 +30,4 @@ functions.main(workbook1)
 #traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=functions.doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
 
 #   Outputs graphs
-#functions.graphs(angularve, torqued,name)
+#functions.graphs(angularve, torqued,name,)
