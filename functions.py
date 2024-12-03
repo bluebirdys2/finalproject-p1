@@ -100,6 +100,14 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
 
 
 def calchp(angularve,torque):
+    """
+    calculates horsepower given torque and angular velocity
+    args:
+    torque= given torque
+    angularve= omega given
+    return
+    hp= horsepower
+    """
     hp=torque*angularve*0.7375621493/5252
     return hp
     
@@ -123,16 +131,32 @@ def graphs(angularvex, torquex,name):
 
 
 def makeres(count,ogsheet,dragC,area):
+    """
+    This creates a new workbook and sheet for the results page
+    Args:
+    count= how many times the user has gone through the loop
+    ogsheet= original data sheet
+    dragC=drag coefficient
+    area=area of the front of vehicle 
+    returns:
+    newsheet= sheet that would contain new results
+    results= workbook that contains results
+    """
     try:
+        #tests to see if file exists
         results=pyxl.load_workbook("All_Results.xlsx")
     except FileNotFoundError:
+        #creates new workbook if file does not exist
         results=pyxl.Workbook()
     
     try:
+        #tests to see if sheet exists
         newsheet=results["Results_{}".format(count)]
     except KeyError:
+        #creates sheet if the sheet does not exist
         print("new sheet made #{} ".format(count))
         newsheet=results.create_sheet("Results_{}".format(count))
+    #prints all predetermined info
     newsheet["A4"]="Gears"
     newsheet["B4"]="Ratio"
     newsheet["C4"]="WR(N)"
@@ -149,10 +173,10 @@ def makeres(count,ogsheet,dragC,area):
     for i in range(12,24):
         newsheet["A{}".format(i)]=ogsheet["B{}".format(i)].value
         newsheet["B{}".format(i)]=ogsheet["C{}".format(i)].value
-    newsheet["A26"]="CD"
-    newsheet["B26"]=dragC
-    newsheet["A27"]="Area"
-    newsheet["B27"]=area
+    newsheet["A24"]="CD"
+    newsheet["B24"]=dragC
+    newsheet["A25"]="Area"
+    newsheet["B25"]=area
     newsheet["A5"]="1st"
     newsheet["A6"]="2nd"
     newsheet["A7"]="3rd"
