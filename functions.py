@@ -7,71 +7,6 @@ from numpy.polynomial import Polynomial as poly
 workbook= pyxl.load_workbook("data.xlsx")
 
 
-def carChoice(workbook):
-    """
-    This function gives the user an option for which car they want
-    and then returns the drag coefficient and area of front bumbper
-    Args:
-    sheet= needs a sheet to get all value
-    Returns:
-    dragC= Drag coefficient
-    area= area of front hood
-    
-    
-    """
-    count=0
-    option=0
-    sheet1=workbook["Problem Variables"]
-    sheet2=workbook["cr-28 var"]
-    print("**********************************************")
-    print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}\n6. {} {}".format(sheet1["B26"].value,sheet1["A26"].value,sheet1["B27"].value,sheet1["A27"].value, sheet1["B28"].value,sheet1["A28"].value,sheet1["B29"].value,sheet1["A29"].value,sheet1["B30"].value,sheet1["A30"].value,sheet2["B26"].value,sheet2["A26"].value))
-    print("**********************************************")
-    while(option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
-        
-        option=int(input("Select the car choice options (1-6) "))
-        match option:
-            case 1:
-                dragC=sheet1["C26"].value
-                area=sheet1["D26"].value
-                name=sheet1["A26"].value
-                count+=1
-                sheet=sheet1
-
-            case 2:
-                dragC=sheet1["C27"].value
-                area=sheet1["D27"].value
-                name=sheet1["A27"].value
-                count+=1
-                sheet=sheet1
-            case 3:
-                dragC=sheet1["C28"].value
-                area=sheet1["D28"].value
-                name=sheet1["A28"].value
-                count+=1
-                sheet=sheet1
-            case 4:
-                dragC=sheet1["C29"].value
-                area=sheet1["D29"].value
-                name=sheet1["A29"].value
-                count+=1
-                sheet=sheet1
-            case 5:
-                dragC=sheet1["C30"].value
-                area=sheet1["D30"].value
-                name=sheet1["A30"].value
-                count+=1
-                sheet=sheet1
-            case 6: 
-                
-                dragC=sheet2["C26"].value
-                area=sheet2["D26"].value
-                name=sheet2["A26"].value
-                count+=1
-                sheet=sheet2
-            case _:
-            #HR Friendly error message
-                print("ERROR! Selection is invalid\n")
-    return dragC,area,name,count,sheet
 def getGears(sheet):
     """
     This function takes in the spreadsheet and then uses the sheet to 
@@ -116,9 +51,14 @@ def getothers(sheet):
     return speed,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg
 
 def getdyno(sheet):
+    angularvex=[]
+    torquex=[]
     for i in range(4,16):
-        angularvex=sheet["A{}".format(i)].value
-        torquex=sheet["B{}".format(i)].value
+        angularvex.append(sheet["A{}".format(i)].value)
+        
+        torquex.append(sheet["B{}".format(i)].value)
+    angularvex=np.array(angularvex)
+    torquex=np.array(torquex)
     return angularvex,torquex
 """def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
     airres=.5*airden*dragC*csA*v**2
@@ -183,6 +123,7 @@ def graphs(angularvex, torquex,name):
 
 
 def makeres(count,ogsheet,dragC,area):
+
     workbook=pyxl.load_workbook("All_Results.xlsx")
     newsheet=workbook["Results_{}".format(count)]
     newsheet["4A"]="Gears"
@@ -233,3 +174,93 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,front
         newsheet["L{}".format(i+5)]=angularve[i]
         newsheet["C{}".format(i+5)]=rearLoad[i]
         newsheet["D{}".format(i+5)]=frontLoad[i]
+
+
+def carChoice(workbook):
+    """
+    This function gives the user an option for which car they want
+    and then returns the drag coefficient and area of front bumbper
+    Args:
+    sheet= needs a sheet to get all value
+    Returns:
+    dragC= Drag coefficient
+    area= area of front hood
+    
+    
+    """
+    count=0
+    option=0
+    sheet1=workbook["Problem Variables"]
+    sheet2=workbook["cr-28 var"]
+    print("**********************************************")
+    print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}\n6. {} {}\n7.Exit".format(sheet1["B26"].value,sheet1["A26"].value,sheet1["B27"].value,sheet1["A27"].value, sheet1["B28"].value,sheet1["A28"].value,sheet1["B29"].value,sheet1["A29"].value,sheet1["B30"].value,sheet1["A30"].value,sheet2["B26"].value,sheet2["A26"].value))
+    print("**********************************************")
+    while(option!=7):
+        while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
+        
+            option=int(input("Select the car choice options (1-6) "))
+            match option:
+                case 1:
+                    dragC=sheet1["C26"].value
+                    area=sheet1["D26"].value
+                    name=sheet1["A26"].value
+                    count+=1
+                    sheet=sheet1
+
+                case 2:
+                    dragC=sheet1["C27"].value
+                    area=sheet1["D27"].value
+                    name=sheet1["A27"].value
+                    count+=1
+                    sheet=sheet1
+                case 3:
+                    dragC=sheet1["C28"].value
+                    area=sheet1["D28"].value
+                    name=sheet1["A28"].value
+                    count+=1
+                    sheet=sheet1
+                case 4:
+                    dragC=sheet1["C29"].value
+                    area=sheet1["D29"].value
+                    name=sheet1["A29"].value
+                    count+=1
+                    sheet=sheet1
+                case 5:
+                    dragC=sheet1["C30"].value
+                    area=sheet1["D30"].value
+                    name=sheet1["A30"].value
+                    count+=1
+                    sheet=sheet1
+                case 6: 
+                
+                    dragC=sheet2["C26"].value
+                    area=sheet2["D26"].value
+                    name=sheet2["A26"].value
+                    count+=1
+                    sheet=sheet2
+                case 7:
+                    print("Have a good day")
+                case _:
+                #HR Friendly error message
+                    print("ERROR! Selection is invalid\n")
+        if(option!=7):
+            gears = getGears(sheet)
+
+            #   Function that returns all other varibles in the excel for use by later functions
+            v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = getothers(sheet)
+
+            # Function that returns angularvex and torquex
+            if(name!="cr-28"):
+                dynosheet=workbook["Dynamometer"]
+            else:
+                dynosheet=workbook["cr-dyno"]
+            angularvex,torquex = getdyno(dynosheet)
+
+            #   Function that calculates roadload given rollres,weight,tslope,airden,dragC,csA, and v
+            traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=doMath(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
+
+            #   Outputs graphs
+            #functions.graphs(angularve, torqued,name)
+
+            newsheet=makeres(count,sheet,dragC,area)    
+            outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
