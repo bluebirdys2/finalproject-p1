@@ -9,7 +9,7 @@ import openpyxl as pyxl
 #   Defines the Excel file in which all the given data is stored
 workbook1 = pyxl.load_workbook("data.xlsx")
 
-
+print("program started")
 #   Calls a function that returns the drag coefficient, cross sectional area, and name of car selected by the user
 functions.carChoice(workbook1)
 

@@ -149,6 +149,7 @@ def makeres(count,ogsheet,dragC,area):
     newsheet["B26"]=dragC
     newsheet["A27"]="Area"
     newsheet["B27"]=area
+    workbook.save("All_Results.xlsx")
     return newsheet
 
 def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS,frontLoad,rearLoad):
@@ -176,6 +177,8 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,front
         newsheet["L{}".format(i+5)]=angularve[i]
         newsheet["C{}".format(i+5)]=rearLoad[i]
         newsheet["D{}".format(i+5)]=frontLoad[i]
+        workbook.save("All_Results.xlsx")
+
 
 
 def carChoice(workbook):
@@ -198,6 +201,7 @@ def carChoice(workbook):
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}\n6. {} {}\n7.Exit".format(sheet1["B26"].value,sheet1["A26"].value,sheet1["B27"].value,sheet1["A27"].value, sheet1["B28"].value,sheet1["A28"].value,sheet1["B29"].value,sheet1["A29"].value,sheet1["B30"].value,sheet1["A30"].value,sheet2["B26"].value,sheet2["A26"].value))
     print("**********************************************")
     while(option!=7):
+        option=0
         while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
         
             option=int(input("Select the car choice options (1-6) "))
@@ -267,6 +271,6 @@ def carChoice(workbook):
             #functions.graphs(angularve, torqued,name)
             print("yay")
             graphs(angularvex, torquex,name)
-            #newsheet=makeres(count,sheet,dragC,area)    
-            #outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
+            newsheet=makeres(count,sheet,dragC,area)    
+            outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload)
             
