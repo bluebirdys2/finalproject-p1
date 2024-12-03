@@ -11,7 +11,7 @@ workbook1 = pyxl.load_workbook("data.xlsx")
 
 print("program started")
 #   Calls a function that returns the drag coefficient, cross sectional area, and name of car selected by the user
-functions.carChoice(workbook1)
+functions.main(workbook1)
 
 #   Returns the gear ratios from the excel file 
 #gears = functions.getGears(sheet)

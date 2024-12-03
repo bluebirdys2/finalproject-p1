@@ -192,32 +192,32 @@ def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,front
         hp=calchp(angularve[i],te[i])
         #errors here
         if(angularve[i]>7000 and name!="CR-28"):
-            accel[i]=None
-            trac[i]=None
-            roadload=None
-            te[i]=None
-            angularve[i]=None
-            hp=None
-            rearloadS=None
-            frontLoadS=None
-            rearLoad[i]=None
-            frontLoad[i]=None
-        newsheet["B{}".format(i+5)]=gears[i]
-        newsheet["E{}".format(i+5)]=rearloadS
-        newsheet["F{}".format(i+5)]=frontLoadS
-        newsheet["G{}".format(i+5)]=accel[i]
-        newsheet["H{}".format(i+5)]=trac[i]
-        newsheet["I{}".format(i+5)]=roadload
-        newsheet["J{}".format(i+5)]=hp
+            newsheet["E{}".format(i+5)]="OOR"
+            newsheet["F{}".format(i+5)]="OOR"
+            newsheet["G{}".format(i+5)]="OOR"
+            newsheet["H{}".format(i+5)]="OOR"
+            newsheet["I{}".format(i+5)]="OOR"
+            newsheet["J{}".format(i+5)]="OOR"
         
-        newsheet["K{}".format(i+5)]=te[i]
-        newsheet["L{}".format(i+5)]=angularve[i]
-        newsheet["C{}".format(i+5)]=rearLoad[i]
-        newsheet["D{}".format(i+5)]=frontLoad[i]
+            newsheet["K{}".format(i+5)]="OOR"
+            newsheet["L{}".format(i+5)]="OOR"
+            newsheet["C{}".format(i+5)]="OOR"
+            newsheet["D{}".format(i+5)]="OOR"
+        else:
+            print("cool output")
+            newsheet["B{}".format(i+5)]=gears[i]
+            newsheet["E{}".format(i+5)]=rearloadS
+            newsheet["F{}".format(i+5)]=frontLoadS
+            newsheet["G{}".format(i+5)]=accel[i]
+            newsheet["H{}".format(i+5)]=trac[i]
+            newsheet["I{}".format(i+5)]=roadload
+            newsheet["J{}".format(i+5)]=hp
+        
+            newsheet["K{}".format(i+5)]=te[i]
+            newsheet["L{}".format(i+5)]=angularve[i]
+            newsheet["C{}".format(i+5)]=rearLoad[i]
+            newsheet["D{}".format(i+5)]=frontLoad[i]
         results.save("All_Results.xlsx")
-
-
-
 def carChoice(workbook):
     """
     This function gives the user an option for which car they want
@@ -237,74 +237,85 @@ def carChoice(workbook):
     print("**********************************************")
     print("1. {} {}\n2. {} {}\n3. {} {}\n4.{} {}\n5. {} {}\n6. {} {}\n7.Exit".format(sheet1["B26"].value,sheet1["A26"].value,sheet1["B27"].value,sheet1["A27"].value, sheet1["B28"].value,sheet1["A28"].value,sheet1["B29"].value,sheet1["A29"].value,sheet1["B30"].value,sheet1["A30"].value,sheet2["B26"].value,sheet2["A26"].value))
     print("**********************************************")
-    while(option!=7):
-        option=0
-        while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
+    
+    option=0
+    while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
         
-            option=int(input("Select the car choice options (1-6) "))
-            match option:
-                case 1:
-                    dragC=sheet1["C26"].value
-                    area=sheet1["D26"].value
-                    name=sheet1["A26"].value
-                    count+=1
-                    sheet=sheet1
+        option=int(input("Select the car choice options (1-6) "))
+        match option:
+            case 1:
+                dragC=sheet1["C26"].value
+                area=sheet1["D26"].value
+                name=sheet1["A26"].value
+                count+=1
+                sheet=sheet1
 
-                case 2:
-                    dragC=sheet1["C27"].value
-                    area=sheet1["D27"].value
-                    name=sheet1["A27"].value
-                    count+=1
-                    sheet=sheet1
-                case 3:
-                    dragC=sheet1["C28"].value
-                    area=sheet1["D28"].value
-                    name=sheet1["A28"].value
-                    count+=1
-                    sheet=sheet1
-                case 4:
-                    dragC=sheet1["C29"].value
-                    area=sheet1["D29"].value
-                    name=sheet1["A29"].value
-                    count+=1
-                    sheet=sheet1
-                case 5:
-                    dragC=sheet1["C30"].value
-                    area=sheet1["D30"].value
-                    name=sheet1["A30"].value
-                    count+=1
-                    sheet=sheet1
-                case 6: 
-                
-                    dragC=sheet2["C26"].value
-                    area=sheet2["D26"].value
-                    name=sheet2["A26"].value
-                    count+=1
-                    sheet=sheet2
-                case 7:
-                    print("Have a good day")
-                case _:
-                #HR Friendly error message
-                    print("ERROR! Selection is invalid\n")
-        if(option!=7):
-            gears = getGears(sheet)
-            print("gears gotten")
-            #   Function that returns all other varibles in the excel for use by later functions
+            case 2:
+                dragC=sheet1["C27"].value
+                area=sheet1["D27"].value
+                name=sheet1["A27"].value
+                count+=1
+                sheet=sheet1
+            case 3:
+                dragC=sheet1["C28"].value
+                area=sheet1["D28"].value
+                name=sheet1["A28"].value
+                count+=1
+                sheet=sheet1
+            case 4:
+                dragC=sheet1["C29"].value
+                area=sheet1["D29"].value
+                name=sheet1["A29"].value
+                count+=1
+                sheet=sheet1
+            case 5:
+                dragC=sheet1["C30"].value
+                area=sheet1["D30"].value
+                name=sheet1["A30"].value
+                count+=1
+                sheet=sheet1
+            case 6: 
             
-            v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = getothers(sheet)
-            print("other stuff gotten")
-            # Function that returns angularvex and torquex
-            if(name!="cr-28"):
-                dynosheet=workbook["Dynamometer"]
-            else:
-                dynosheet=workbook["cr-dyno"]
+                dragC=sheet2["C26"].value
+                area=sheet2["D26"].value
+                name=sheet2["A26"].value
+                count+=1
+                sheet=sheet2
+            case 7:
+                print("Have a good day")
+                name="null"
+                area=-1
+                dragC=-1
+                sheet=sheet1
+
+            case _:
+            #HR Friendly error message
+                print("ERROR! Selection is invalid\n")
+    return dragC,area,name,count,sheet,option
+
+def main(workbook):
+        option=0
+        while(option!=7):
+            dragC,area,name,count,sheet,option=carChoice(workbook)
+            if(option!=7):
+                gears = getGears(sheet)
+                print("gears gotten")
+                #   Function that returns all other varibles in the excel for use by later functions
             
-            angularvex,torquex = getdyno(dynosheet)
+                v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = getothers(sheet)
+                print("other stuff gotten")
+                # Function that returns angularvex and torquex
+                if(name!="cr-28"):
+                    dynosheet=workbook["Dynamometer"]
+                else:
+                    dynosheet=workbook["cr-dyno"]
             
-            #   Function that calculates roadload given rollres,weight,tslope,airden,dragC,csA, and v
-            traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=doMath(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
+                angularvex,torquex = getdyno(dynosheet)
             
-            #   Outputs graphs
+                #   Function that calculates roadload given rollres,weight,tslope,airden,dragC,csA, and v
+                traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=doMath(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
+            
+                #   Outputs graphs
             #functions.graphs(angularve, torqued,name)
             
             graphs(angularvex, torquex,name)
