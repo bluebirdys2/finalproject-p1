@@ -26,7 +26,7 @@ def getGears(sheet):
     gears=[]
     for i in range(4,10):
         while(sheet["B{}".format(i)].value<0):
-            sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
+            sheet["B{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)].value)))
         gears.append(sheet["B{}".format(i)].value)
     gears=np.array(gears)
     return gears
@@ -34,7 +34,7 @@ def getothers(sheet):
     
     for i in range(12,24):
         while(sheet["C{}".format(i)].value<0):
-            sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)])))
+            sheet["C{}".format(i)]=float(input("The value of your {} is negative, input a new value: ".format(sheet["A{}".format(i)].value)))
     
     speed=sheet["C12"].value /3.6
     tslope=sheet["C13"].value/100
@@ -86,7 +86,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     Wperp=weight*np.cos(tslope)
     
     
-    frontload=((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
+    frontload=-1*((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
     rearload=((airres*hA)+(weight/9.81)*hA*acceleration+(centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
 
     frontloads=(Wperp*(wbase-centerg))/(wbase)
@@ -111,7 +111,7 @@ def calchp(angularve,torque):
     hp=torque*angularve*0.7375621493/5252
     return hp
     
-def graphs(angularvex, torquex,name):
+def graphs(angularvex, torquex,name,torqued,gears,acceleration):
     #dyno graph
     if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
@@ -119,13 +119,16 @@ def graphs(angularvex, torquex,name):
         fx=poly.fit(angularvex,torquex,5)
     x=np.linspace(min(angularvex),max(angularvex),6000)
     fy=fx(x)
+
     plt.subplot(2,2,1)
     plt.plot(angularvex,torquex,"ro")
     plt.plot(x,fy,"r-")
+    plt.plot(torqued,acceleration,"r-")
     plt.title("Experimental dyno data and fit")
     plt.ylabel("engine torque(n m)")
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
+    
     #
 
 
@@ -242,6 +245,7 @@ def carChoice(workbook):
     option=0
     while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
         
+<<<<<<< Updated upstream
         option=int(input("Select the car choice options (1-6) "))
         match option:
             case 1:
@@ -250,6 +254,16 @@ def carChoice(workbook):
                 name=sheet1["A26"].value
                 count+=1
                 sheet=sheet1
+=======
+            option=int(input("Select the car choice options (1-7) "))
+            match option:
+                case 1:
+                    dragC=sheet1["C26"].value
+                    area=sheet1["D26"].value
+                    name=sheet1["A26"].value
+                    count+=1
+                    sheet=sheet1
+>>>>>>> Stashed changes
 
             case 2:
                 dragC=sheet1["C27"].value
@@ -319,7 +333,7 @@ def main(workbook):
                 #   Outputs graphs
             #functions.graphs(angularve, torqued,name)
             
-            graphs(angularvex, torquex,name)
+            graphs(angularvex, torquex,name,torqued,gears,acceleration)
             newsheet,results=makeres(count,sheet,dragC,area)    
             outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload,results)
             
