@@ -192,6 +192,26 @@ def makeres(count,ogsheet,dragC,area):
     return newsheet,results
 
 def outputs(gears,angularve,te,accel,trac,roadload,newsheet,name,rearloadS,frontLoadS,frontLoad,rearLoad,results):
+    """
+    outputs all calculated data and given data onto a result exccel file
+    args:
+    gears: array containing the gear ratio for each gear
+    angularve: angular velocity of engine
+    te: torque at engine
+    accel= acceleration
+    trac= traction
+    roadload= all resistances and grade load
+    newsheet= sheet for data output
+    name= name of car
+    rearloadS= static rear axle load
+    frontLoadS= static front axle load
+    frontLoad= front dynamic axle load
+    rearLoad= rear dynamic axle load
+    results= result workbook
+    returns:
+    None
+    
+    """
     for i in range(0,6):
         hp=calchp(angularve[i],te[i])
         #errors here
@@ -320,9 +340,9 @@ def main(workbook):
                 traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te=doMath(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
             
                 #   Outputs graphs
-            #functions.graphs(angularve, torqued,name)
+                #functions.graphs(angularve, torqued,name)
             
-            graphs(angularvex, torquex,name,torqued,gears,acceleration)
-            newsheet,results=makeres(count,sheet,dragC,area)    
-            outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload,results)
+                graphs(angularvex, torquex,name,torqued,gears,acceleration)
+                newsheet,results=makeres(count,sheet,dragC,area)    
+                outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload,results)
             
