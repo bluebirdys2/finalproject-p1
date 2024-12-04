@@ -409,7 +409,7 @@ def main(workbook):
                 if(name!="CR-28"):
                     dynosheet=workbook["Dynamometer"]
                 else:
-                    print("yay")
+                    
                     dynosheet=workbook["cr-dyno"]
             
                 angularvex,torquex = getdyno(dynosheet)
