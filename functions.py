@@ -110,7 +110,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     Wperp=weight*np.cos(tslope)
     
     
-    frontload=np.abs(((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase)
+    frontload=np.absolute(((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase)
     rearload=((airres*hA)+(weight/9.81)*hA*acceleration+(centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
 
     frontloads=(Wperp*(wbase-centerg))/(wbase)
