@@ -60,12 +60,7 @@ def getdyno(sheet):
     angularvex=np.array(angularvex)
     torquex=np.array(torquex)
     return angularvex,torquex
-"""def calcRoadLoad(rollres,weight,tslope,airden,dragC,csA,v):
-    airres=.5*airden*dragC*csA*v**2
-    rRoll=rollres*weight*np.cos((np.atan(tslope/100)))
-    roadLoad=rRoll+weight*np.sin((np.atan(tslope/100)))+airres
-    return roadLoad
-"""
+
 def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA):
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope)))
@@ -86,7 +81,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     Wperp=weight*np.cos(tslope)
     
     
-    frontload=-1*((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
+    frontload=np.abs(((airres*hA)+(weight/9.81)*hA*acceleration-(wbase-centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase)
     rearload=((airres*hA)+(weight/9.81)*hA*acceleration+(centerg)*Wperp+weight*np.sin(tslope)*hA)/wbase
 
     frontloads=(Wperp*(wbase-centerg))/(wbase)
@@ -109,7 +104,7 @@ def calchp(angularve,torque):
     hp=torque*angularve*0.7375621493/5252
     return hp
     
-def graphs(angularvex, torquex,name,torqued,gears,acceleration):
+def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA):
     #dyno graph
     if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
@@ -126,9 +121,16 @@ def graphs(angularvex, torquex,name,torqued,gears,acceleration):
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
     plt.subplot(2,2,2)
-    plt.plot(acceleration,torqued,"ro")
-    plt.title("Drivetrain Torque V.S. Acceleration")
-    plt.tight_layout
+    vels=np.linspace(0,200,200)
+    for n,each_gear in enumerate(gears):
+        for i,each_vel in enumerate(vels):
+           traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,weight,tslope,airden,dragC,csA,each_vel,radius,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
+           if angularve<7000 and name!="CR-28":
+                plt.plot(each_vel,acceleration,"ro",markersize=1)
+                plt.title("Drivetrain Torque V.S. Acceleration")
+                if i==5:
+                    plt.text(each_vel+0.05,acceleration+0.05,"gear {}".format(n+1),fontsize=8)
+    plt.tight_layout()
     plt.show()
     
     #
@@ -344,7 +346,7 @@ def main(workbook):
                 #   Outputs graphs
                 #functions.graphs(angularve, torqued,name)
             
-                graphs(angularvex, torquex,name,torqued,gears,acceleration)
+                graphs(rollres,weight,tslope,airden,dragC,area,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA)
                 newsheet,results=makeres(count,sheet,dragC,area)    
                 outputs(gears,angularve,te,acceleration,traction,roadLoad,newsheet,name,rearloads,frontloads,frontload,rearload,results)
             
