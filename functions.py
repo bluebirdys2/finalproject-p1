@@ -31,6 +31,20 @@ def getGears(sheet):
     gears=np.array(gears)
     return gears
 def getothers(sheet):
+    """
+    this function is being used to grab our data 
+    tslope is the the terrain slope as a percentage\
+    wbase is the wheel base of the car
+    radius is the radius of the cars wheels
+    rollress is the rolling resitance coeficiant
+    hA is the center of gravity of the car 
+    fdrive is the final drive efficiency as a percentage
+    teff is the transimion efficiency as a percentage
+    weight is the weight of the car given in N
+    airden is the airdensity given in ρ
+    dratio is the drive ratio of the car 
+    centerg is the distance from the center of gravity of the car to the front wheel
+    """
     
     for i in range(12,24):
         while(sheet["C{}".format(i)].value<0):
@@ -51,6 +65,7 @@ def getothers(sheet):
     return speed,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg
 
 def getdyno(sheet):
+    """this function extracts the data from our excel file from our dyno data that we collected"""
     angularvex=[]
     torquex=[]
     for i in range(4,16):
@@ -62,10 +77,24 @@ def getdyno(sheet):
     return angularvex,torquex
 
 def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA):
+    """
+    This is the function that does math
+    airress calculates airressitance that is affecting the car
+    rRoll is the caculation for the rolling ressitance 
+    roadload is the caculation of rolling restiance + the grade load + the airres
+    angularve is the caculation of angualrvelocity derived from gears * the driveratio * velocity * the wheel area
+    finaledrivE is fdrive converted from a percentage 
+    the if function is to differntiate between the data from the cars given and the car we are getting new dyno data from
+    te is the torque we get from the best poly fit of angularvex and the angularve
+    torqued is the caculation of the torque at the drive train using finaledrivE and the drive ratio from the data provide
+    teff is the percentage of transmision efficiany given which is then converted from a percentage
+    traction is the caculation of torqued over the radius of the car wheel
+    wperp is a shorthand variable for caculating weight * cos theta
+
+    """
     airres=.5*airden*dragC*csA*v**2
     rRoll=rollres*weight*np.cos((np.atan(tslope)))
     roadLoad=rRoll+weight*np.sin((np.atan(tslope)))+airres
-
 
 
     angularve=gears*dratio*v*60/(radius*2*np.pi)
@@ -322,6 +351,14 @@ def carChoice(workbook):
     return dragC,area,name,count,sheet,option
 
 def main(workbook):
+        """
+        This is the main function for our program
+        it gather up our other functions and runs them
+        it has a while loop to ask for which car the user would like to have 
+        graphs is the function that runs our graphs and outputs them
+        makeresis the function that creates a new workbook
+        outputs is the function that outputs our data to the excel file 
+        """
         option=0
         while(option!=7):
             dragC,area,name,count,sheet,option=carChoice(workbook)
