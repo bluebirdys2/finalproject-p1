@@ -1,5 +1,6 @@
 #This module contatins all function for a statics problem of a car going up a hill
 #contains input, calculation, and output functions
+#created by stressed testers
 import numpy as np
 import openpyxl as pyxl
 import matplotlib.pyplot as plt

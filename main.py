@@ -1,5 +1,6 @@
 #   This file calls all function for a statics problem of a car going up a hill
-#
+#created by stressed testers
+#12/4/24
 #
 
 #   Imports the modules needed to solve the problem and openpyxl
