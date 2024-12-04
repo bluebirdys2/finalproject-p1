@@ -74,6 +74,7 @@ def getdyno(sheet):
         torquex.append(sheet["B{}".format(i)].value)
     angularvex=np.array(angularvex)
     torquex=np.array(torquex)
+    
     return angularvex,torquex
 
 def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,gears,angularvex,torquex,name,wbase,centerg,hA):
@@ -102,7 +103,7 @@ def doMath(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
     else:
-        fx=poly.fit(angularvex,torquex,5)
+        fx=poly.fit(angularvex,torquex,3)
     te=fx(angularve)
     torqued=finaldrivE*dratio*(teff/100)*gears*te
     traction=torqued/radius
@@ -138,8 +139,8 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     if(name!="CR-28"):
         fx=poly.fit(angularvex,torquex,4)
     else:
-        fx=poly.fit(angularvex,torquex,5)
-    x=np.linspace(min(angularvex),max(angularvex),6000)
+        fx=poly.fit(angularvex,torquex,3)
+    x=np.linspace(0,max(angularvex),6000)
     fy=fx(x)
 
     plt.subplot(2,2,1)
@@ -160,7 +161,7 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
            plt.subplot(2,2,2)
            
            traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,weight,tslope,airden,dragC,csA,each_vel,radius,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
-           if angularve<7000 or name=="CR-28":
+           if angularve<7000 :
                 
                 plt.plot(each_vel,acceleration,"{}o".format(colors[n]),markersize=2)
                 
@@ -173,7 +174,7 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
         plt.subplot(2,2,3)
         for i,each_rad in enumerate(rads):
             traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,weight,tslope,airden,dragC,csA,v,each_rad,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
-            if angularve<7000 or name=="CR-28":
+            if angularve<7000 :
                 plt.plot(each_rad,traction,"{}o".format(colors[n]),markersize=1)
                 if i==40:
                     plt.text(each_rad+0.05,traction-0.05,"gear {}".format(n+1),fontsize=8)
@@ -185,7 +186,7 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
         plt.subplot(2,2,4)
         for i,each_weight in enumerate(weigh):
             traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,each_weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
-            if angularve<7000 or name=="CR-28":
+            if angularve<7000 :
                 plt.plot(each_weight,acceleration,"{}o".format(colors[n]),markersize=1)
                 if i==10:
                     plt.text(each_weight+0.05,acceleration+0.05,"gear {}".format(n+1),fontsize=8)
