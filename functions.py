@@ -149,16 +149,53 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     plt.ylabel("engine torque(n m)")
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
-    plt.subplot(2,2,2)
+    colors=["b","c","g","k","r","m"]
     vels=np.linspace(0,200,200)
+    rads=np.linspace(.1,.5,60)
+    weigh=np.linspace(1000,20000,100)
     for n,each_gear in enumerate(gears):
         for i,each_vel in enumerate(vels):
+           plt.subplot(2,2,2)
+           
            traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,weight,tslope,airden,dragC,csA,each_vel,radius,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
-           if angularve<7000 and name!="CR-28":
-                plt.plot(each_vel,acceleration,"ro",markersize=1)
-                plt.title("Drivetrain Torque V.S. Acceleration")
+           if angularve<7000 or name=="CR-28":
+                
+                plt.plot(each_vel,acceleration,"{}o".format(colors[n]),markersize=2)
+                
+                   
                 if i==5:
                     plt.text(each_vel+0.05,acceleration+0.05,"gear {}".format(n+1),fontsize=8)
+        plt.title("velocity vs acceleration")
+        plt.xlabel("velocity (m/s)")
+        plt.ylabel("Acceleration (m/s^2)") 
+        plt.subplot(2,2,3)
+        for i,each_rad in enumerate(rads):
+            traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,weight,tslope,airden,dragC,csA,v,each_rad,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
+            if angularve<7000 or name=="CR-28":
+                plt.plot(each_rad,traction,"{}o".format(colors[n]),markersize=1)
+                if i==40:
+                    plt.text(each_rad+0.05,traction-0.05,"gear {}".format(n+1),fontsize=8)
+        plt.title("radius of wheel vs traction")
+        plt.xlabel("radius of wheel (m)")
+        plt.ylabel("traction(n)")
+
+        plt.subplot(2,2,4)
+        for i,each_weight in enumerate(weigh):
+            traction,torqued,acceleration, angularve, roadLoad,rearload,frontload,frontloads,rearloads,te= doMath(rollres,each_weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,each_gear,angularvex,torquex,name,wbase,centerg,hA)
+            if angularve<7000 or name=="CR-28":
+                plt.plot(each_weight,acceleration,"{}o".format(colors[n]),markersize=1)
+                if i==10:
+                    plt.text(each_weight+0.05,acceleration+0.05,"gear {}".format(n+1),fontsize=8)
+        plt.title("weight vs acceleration")
+        plt.xlabel("weight(N)")
+        plt.ylabel("acceleration(m/s^2)")
+
+
+    
+    
+    
+        
+    
     plt.tight_layout()
     plt.show()
     
