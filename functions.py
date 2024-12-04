@@ -149,6 +149,8 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
     plt.ylabel("engine torque(n m)")
     plt.xlabel("angular velocity(rpm)")
     plt.legend([name])
+    if(name=="CR-28"):
+        plt.ylim(0,34)
     colors=["b","c","g","k","r","m"]
     vels=np.linspace(0,200,200)
     rads=np.linspace(.1,.5,60)
@@ -175,6 +177,7 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
                 plt.plot(each_rad,traction,"{}o".format(colors[n]),markersize=1)
                 if i==40:
                     plt.text(each_rad+0.05,traction-0.05,"gear {}".format(n+1),fontsize=8)
+        
         plt.title("radius of wheel vs traction")
         plt.xlabel("radius of wheel (m)")
         plt.ylabel("traction(n)")
@@ -189,13 +192,9 @@ def graphs(rollres,weight,tslope,airden,dragC,csA,v,radius,dratio,teff,fdrive,ge
         plt.title("weight vs acceleration")
         plt.xlabel("weight(N)")
         plt.ylabel("acceleration(m/s^2)")
-
-
-    
-    
-    
         
-    
+
+
     plt.tight_layout()
     plt.show()
     
@@ -335,7 +334,7 @@ def carChoice(workbook):
     option=0
     while(option!=7 and option!= 6 and option!=5 and option!=4 and option!=3 and option!=2 and option!=1):
         
-        option=int(input("Select the car choice options (1-6) "))
+        option=int(input("Select the car choice options (1-7) "))
         match option:
             case 1:
                 dragC=sheet1["C26"].value
@@ -407,9 +406,10 @@ def main(workbook):
                 v,tslope,wbase,radius,rollres,hA,fdrive,teff,weight,airden,dratio,centerg = getothers(sheet)
                 
                 # Function that returns angularvex and torquex
-                if(name!="cr-28"):
+                if(name!="CR-28"):
                     dynosheet=workbook["Dynamometer"]
                 else:
+                    print("yay")
                     dynosheet=workbook["cr-dyno"]
             
                 angularvex,torquex = getdyno(dynosheet)
